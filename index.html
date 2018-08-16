@@ -6,23 +6,29 @@
     <title>Such a simple hash tables</title>
 
     <link rel="stylesheet" href="reveal.js/css/reveal.css">
-	  <link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
-	  <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css" id="theme">
+	  <link rel="stylesheet" href="reveal.js/css/theme/league.css" id="theme">
+	  <!-- <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css" id="theme"> -->
     <style>
-      .reveal p {
-        text-align: left;
-      }
-      .reveal code {
-        background-color: #3f3f3f;
-        font-size: 0.9em;
-      }
-      .reveal ul {
-        display: block;
-        margin-left: 2em;
-      }
-      .reveal section img {
-        background-color: white;
-      }
+     .reveal p {
+         text-align: left;
+     }
+     .reveal code {
+         background-color: #3f3f3f;
+         font-size: 0.9em;
+     }
+     .reveal ul {
+         display: block;
+         margin-left: 2em;
+     }
+     .reveal section img {
+         background-color: white;
+     }
+     .reveal table tbody tr:last-child td {
+         border-bottom: 1px solid;
+     }
+     .revel section table th, .reveal section table td {
+         border: 1px solid;
+     }
     </style>
   </head>
   <body>
@@ -63,7 +69,7 @@
             ### Table size
 
             * Степень 2
-              * Вместо остатка от деления `AND`
+              * Вместо остатка от деления битовый `AND`
               * Использует только младшие `N` бит хэша
 
             * Простое число
@@ -156,57 +162,177 @@
 
             `perturb` - делает `probe sequence` зависимым от всех бит хэша
 
-            После 13 итерация `perturb` всегда будет равен `0`
+            После 13 итерации `perturb` всегда будет равен `0`
         </section>
 
-	<section data-markdown>
-            `x -> 0`
+        <section data-markdown>
+            ### Cuckoo hashing
 
-| ix | dist | key |       |
-|----|------|-----|-------|
-| 0  | 0    | a   | x (0) |
-| 1  | 1    | b   |       |
-| 2  | 1    | c   |       |
-| 3  |      |     |       |
-	</section>
-	<section data-markdown>
-| ix | dist | key |       |
-|----|------|-----|-------|
-| 0  | 0    | a   |       |
-| 1  | 1    | b   | x (1) |
-| 2  | 1    | c   |       |
-| 3  |      |     |       |
+            * 2 хэш функции и 2 таблицы (можно и больше)
+            * Максимум 2 проверки при поиске
+            * Но это 2 случайных доступа к памяти
+            * Сложная вставка
+            * Плохо работает с большим `load factor`
         </section>
-	<section data-markdown>
-| ix | dist | key |       |
-|----|------|-----|-------|
-| 0  | 0    | a   |       |
-| 1  | 1    | b   |       |
-| 2  | 1    | c   | x (2) |
-| 3  |      |     |       |
+
+        <section data-markdown>
+            ### Robin Hood Hasing
+
+            #### У богатых берет, бедным дает
         </section>
-	<section data-markdown>
-| ix | dist | key |       |
-|----|------|-----|-------|
-| 0  | 0    | a   |       |
-| 1  | 1    | b   |       |
-| 2  |      |     | x (2) |
-| 3  | 2    | c   |       |
+
+        <section data-markdown>
+            ### Robin Hood Hasing
+
+            * Использует `linear probing`
+            * Хранит с записью дистанцию до начальной ячейки
+            * Если дистанция искомой записи стала больше чем
+              у проверяемой заканчиваем поиск
+            * Хорошо работает при больших `load factor`
+        </section>
+
+        <section data-markdown>
+            #### Robin Hood Hashing
+
+            Insert `x -> 0`
+
+            | ix | dist | key |       |
+            |----|------|-----|-------|
+            | 0  | 0    | a   | x (0) |
+            | 1  | 1    | b   |       |
+            | 2  | 1    | c   |       |
+            | 3  |      |     |       |
+        </section>
+	      <section data-markdown>
+            #### Robin Hood Hashing
+
+            Look for a free bucket
+
+            | ix | dist | key |       |
+            |----|------|-----|-------|
+            | 0  | 0    | a   |       |
+            | 1  | 1    | b   | x (1) |
+            | 2  | 1    | c   |       |
+            | 3  |      |     |       |
         </section>
         <section data-markdown>
-| ix | dist | key |       |
-|----|------|-----|-------|
-| 0  | 0    | a   |       |
-| 1  | 1    | b   |       |
-| 2  | 2    | x   |       |
-| 3  | 2    | c   |       |
+            #### Robin Hood Hashing
+
+            Look for a free bucket
+
+            | ix | dist | key |       |
+            |----|------|-----|-------|
+            | 0  | 0    | a   |       |
+            | 1  | 1    | b   |       |
+            | 2  | 1    | c   | x (2) |
+            | 3  |      |     |       |
+        </section>
+        <section data-markdown>
+            #### Robin Hood Hashing
+
+            Move record
+
+            | ix | dist | key |       |
+            |----|------|-----|-------|
+            | 0  | 0    | a   |       |
+            | 1  | 1    | b   |       |
+            | 2  |      |     | x (2) |
+            | 3  | 2    | c   |       |
+        </section>
+        <section data-markdown>
+            #### Robin Hood Hashing
+
+            Insert new record
+
+            | ix | dist | key |
+            |----|------|-----|
+            | 0  | 0    | a   |
+            | 1  | 1    | b   |
+            | 2  | 2    | x   |
+            | 3  | 2    | c   |
+        </section>
+
+        <section data-markdown>
+            ### Hopscotch hashing
+
+            * Хранит информацию где искать записи
+            * Использует `Bitmap` или `Linked List`
+            * Дружелюбный к `concurrent` реализации
+            * При использовании `Bitmap` кол-во возможных соседей ограничено
+        </section>
+
+        <section data-markdown>
+            #### Hopscotch hashing
+
+            Insert `x -> 0`
+
+            | ix | bitmap | key (dist) |        |
+            |----|--------|------------|--------|
+            | 0  | 1_110  | a (0)      | x (0)  |
+            | 1  | 1_010  | b (1)      | &nbsp; |
+            | 2  | 1_000  | c (1)      | &nbsp; |
+            | 3  | 0_000  | &nbsp;     | &nbsp; |
+        </section>
+
+        <section data-markdown>
+            #### Hopscotch hashing
+
+            Search free bucket
+
+            | ix | bitmap | key (dist) | &nbsp; |
+            |----|--------|------------|--------|
+            | 0  | 1_110  | a (0)      | &nbsp; |
+            | 1  | 1_010  | b (1)      | x (1)  |
+            | 2  | 1_000  | c (1)      | &nbsp; |
+            | 3  | 0_000  | &nbsp;     | &nbsp; |
+        </section>
+
+        <section data-markdown>
+            #### Hopscotch hashing
+
+            Bitmap size is exhausted
+
+            | ix | bitmap | key (dist) |        |
+            |----|--------|------------|--------|
+            | 0  | 1_110  | a (0)      | &nbsp; |
+            | 1  | 1_010  | b (1)      | &nbsp; |
+            | 2  | 1_000  | c (1)      | x (2)  |
+            | 3  | 0_000  | &nbsp;     | &nbsp; |
+        </section>
+
+        <section data-markdown>
+            #### Hopscotch hashing
+
+            Clear bucket moving record
+
+            | ix | bitmap | key (dist) |        |
+            |----|--------|------------|--------|
+            | 0  | 1_110  | a (0)      | &nbsp; |
+            | 1  | 1_001  | b (1)      | &nbsp; |
+            | 2  | 1_000  | &nbsp;     | x (2)  |
+            | 3  | 1_000  | c (2)      | &nbsp; |
+        </section>
+
+        <section data-markdown>
+            #### Hopscotch hashing
+
+            Insert record
+
+            | ix | bitmap | key (dist) |
+            |----|--------|------------|
+            | 0  | 1_111  | a (0)      |
+            | 1  | 1_001  | b (1)      |
+            | 2  | 1_000  | x (2)      |
+            | 3  | 1_000  | c (2)      |
         </section>
 
         <section data-markdown>
             ### Links
 
             * http://codecapsule.com/2013/07/20/cuckoo-hashing/
+            * https://cs.uwaterloo.ca/research/tr/1986/CS-86-14.pdf
             * http://codecapsule.com/2013/11/11/robin-hood-hashing/
+            * http://people.csail.mit.edu/shanir/publications/disc2008_submission_98.pdf
             * http://codecapsule.com/2013/08/11/hopscotch-hashing/
             * https://tessil.github.io/2016/08/29/hopscotch-hashing.html
         </section>
