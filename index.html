@@ -143,6 +143,49 @@
             После 13 итерация `perturb` всегда будет равен `0`
         </section>
 
+	<section data-markdown>
+            `x -> 0`
+
+| ix | dist | key |       |
+|----|------|-----|-------|
+| 0  | 0    | a   | x (0) |
+| 1  | 1    | b   |       |
+| 2  | 1    | c   |       |
+| 3  |      |     |       |
+	</section>
+	<section data-markdown>
+| ix | dist | key |       |
+|----|------|-----|-------|
+| 0  | 0    | a   |       |
+| 1  | 1    | b   | x (1) |
+| 2  | 1    | c   |       |
+| 3  |      |     |       |
+        </section>
+	<section data-markdown>
+| ix | dist | key |       |
+|----|------|-----|-------|
+| 0  | 0    | a   |       |
+| 1  | 1    | b   |       |
+| 2  | 1    | c   | x (2) |
+| 3  |      |     |       |
+        </section>
+	<section data-markdown>
+| ix | dist | key |       |
+|----|------|-----|-------|
+| 0  | 0    | a   |       |
+| 1  | 1    | b   |       |
+| 2  |      |     | x (2) |
+| 3  | 2    | c   |       |
+        </section>
+        <section data-markdown>
+| ix | dist | key |       |
+|----|------|-----|-------|
+| 0  | 0    | a   |       |
+| 1  | 1    | b   |       |
+| 2  | 2    | x   |       |
+| 3  | 2    | c   |       |
+        </section>
+
         <section data-markdown>
             ### Links
 
