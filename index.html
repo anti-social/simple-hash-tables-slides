@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ru">
   <head>
@@ -59,6 +60,19 @@
         </section>
 
         <section data-markdown>
+            ### Table size
+
+            * Степень 2
+              * Вместо остатка от деления `AND`
+              * Использует только младшие `N` бит хэша
+
+            * Простое число
+              * Задействует все биты хэша
+              * Изменяется распределение при изменении размера таблицы
+              * Используется в `.NET`
+        </section>
+
+        <section data-markdown>
             ### Collision resolution
 
             * Chaining
@@ -96,6 +110,8 @@
             #### Quadratic probing
 
             `H + 1`, `H + 4`, `H + 9`, ..., `H + k**2`
+
+            Немного смягчает эффект кластеризации
         </section>
 
         <section data-markdown>
@@ -138,7 +154,7 @@
 
             `0 -> 1 -> 6 -> 7 -> 4 -> 5 -> 2 -> 3 -> 0`
 
-            `perturb` - делает `probe sequence` зависимым от хэша
+            `perturb` - делает `probe sequence` зависимым от всех бит хэша
 
             После 13 итерация `perturb` всегда будет равен `0`
         </section>
